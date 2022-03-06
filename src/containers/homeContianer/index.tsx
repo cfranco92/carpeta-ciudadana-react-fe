@@ -1,7 +1,9 @@
 import React from "react";
 
 const HomeContainer = () => {
-  return <>Home page</>;
+  return (
+    <>Home page</>
+  );
 };
 
 export default HomeContainer;
