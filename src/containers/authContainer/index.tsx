@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Auth = () => {
+const AuthContainer = () => {
   return (
     <>
       Auth page
@@ -8,4 +8,4 @@ const Auth = () => {
   )
 }
 
-export default Auth;
+export default AuthContainer;
