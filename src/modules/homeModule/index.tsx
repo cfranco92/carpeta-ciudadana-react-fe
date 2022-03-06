@@ -1,4 +1,4 @@
-import { DashboardLayout } from "../../common/components/layouts";
+import { DashboardLayout } from "../../components/layouts";
 import React from "react";
 
 const HomeModule = () => {
