@@ -1,13 +1,15 @@
 import React, { ReactNode } from "react";
 
+import logo from "./../../../logo.svg";
+
 interface ProfileLayoutProps {
+  page: string;
   children: ReactNode;
 }
 
-const ProfileLayout = ({ children }: ProfileLayoutProps) => {
+const ProfileLayout = ({ page, children }: ProfileLayoutProps) => {
   return (
     <>
-      This is a profile layout
       <section>{children}</section>
     </>
   );

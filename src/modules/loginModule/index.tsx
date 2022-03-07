@@ -1,14 +1,12 @@
-import React, { ReactNode } from "react";
+import React from "react";
+import { ProfileLayout } from "../../components/layouts";
 
-interface LoginModuleProps {
-  children: ReactNode;
-}
-
-const LoginModule = ({ children }: LoginModuleProps) => {
+const LoginModule = () => {
   return (
     <>
-      Login Module
-      {children}
+      <ProfileLayout page="login-page">
+        <header className="App-header">Login page</header>
+      </ProfileLayout>
     </>
   );
 };

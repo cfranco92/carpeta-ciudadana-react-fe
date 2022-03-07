@@ -1,8 +1,11 @@
 import React from "react";
+import HomeModule from "../../modules/homeModule";
 
 const HomeContainer = () => {
   return (
-    <>Home page</>
+    <>
+      <HomeModule />
+    </>
   );
 };
 
