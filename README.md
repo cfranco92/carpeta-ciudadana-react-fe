@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Docker
+
+### Docker build
+
+docker build -t cfranco92/carpeta-ciudadana-react-fe .
+
+### Docker run
+
+docker run -d -p 3001:80 cfranco92/carpeta-ciudadana-react-fe
+
 ## Available Scripts
 
 In the project directory, you can run:
