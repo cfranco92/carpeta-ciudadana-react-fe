@@ -1,17 +1,22 @@
-import React from "react";
-
 import "./index.css";
+
+import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
+import theme from "./theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
