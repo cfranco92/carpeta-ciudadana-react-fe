@@ -1,12 +1,8 @@
-import LoginModule from "../../modules/loginModule";
 import React from "react";
+import LoginModule from "../../modules/loginModule";
 
 const LoginContainer = () => {
-  return (
-    <>
-      <LoginModule/>
-    </>
-  );
+  return <LoginModule />;
 };
 
 export default LoginContainer;

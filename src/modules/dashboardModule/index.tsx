@@ -1,12 +1,12 @@
 import React from "react";
-import BaseLayout from "../../components/layouts/base-layout";
+import { DashboardLayout } from "../../components/layouts";
 import logo from "./../../logo.svg";
 
-const HomeModule = () => {
+const DashboardModule = () => {
   return (
-    <BaseLayout page="home-page">
+    <DashboardLayout page="dashboard-page">
       <header className="App-header">
-        Home page
+        Dashboard page
         <img src={logo} className="App-logo" alt="logo" />
         <p>Carpeta Ciudadana</p>
         <ul>
@@ -15,8 +15,8 @@ const HomeModule = () => {
         </ul>
         <p>Universidad EAFIT</p>
       </header>
-    </BaseLayout>
+    </DashboardLayout>
   );
 };
 
-export default HomeModule;
+export default DashboardModule;

@@ -28,5 +28,6 @@ const accountSlice = createSlice({
 
 export const { setLoggedIn } = accountSlice.actions;
 export const userAccount = (state: RootState) => state.account.user;
+export const userLoggedIn = (state: RootState) => state.account.loggedIn;
 
 export default accountSlice.reducer;
