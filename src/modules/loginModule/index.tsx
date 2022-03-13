@@ -108,7 +108,7 @@ const LoginModule = () => {
                   />
                 </FormControl>
               </Box>
-              <Button variant="contained" sx={{ m: 3, mb: 10 }}>
+              <Button variant="contained" sx={{ m: 3, mb: 8 }}>
                 Iniciar Sesión
               </Button>
             </CardContent>
