@@ -15,7 +15,7 @@ export const filesApi = createApi({
       postFile: builder.mutation<string, QueryParams>({
         query: (queryParams) => ({
           url: `/${queryParams.uid}`,
-          method: "post",
+          method: "POST",
           data: {
             file: queryParams.file,
           },

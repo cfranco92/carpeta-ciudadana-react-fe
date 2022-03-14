@@ -9,20 +9,20 @@ interface QueryParams {
 
 export const loginApi = createApi({
   reducerPath: "loginApi",
-  baseQuery: apiBaseQuery("/login/api/v1"),
+  baseQuery: apiBaseQuery("https://carpetaciudadana.com/login/api/v1"),
   tagTypes: ["Login"],
   endpoints(builder) {
     return {
-      resetPassword: builder.mutation<User, QueryParams>({
+      login: builder.query<User, QueryParams>({
         query: (queryParams) => ({
           url: `/token`,
-          method: "post",
+          method: "GET",
           data: { email: queryParams.email, password: queryParams.password },
         }),
-        invalidatesTags: ["Login"],
+        providesTags: ["Login"],
       }),
     };
   },
 });
 
-export const { useResetPasswordMutation } = loginApi;
+export const { useLoginQuery } = loginApi;

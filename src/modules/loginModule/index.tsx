@@ -16,25 +16,22 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
+import { loginApi } from "./../../services/login";
 import useStyles from "./styles";
 
 interface State {
-  amount: string;
   password: string;
-  weight: string;
-  weightRange: string;
   showPassword: boolean;
 }
 
 const LoginModule = () => {
   const classes = useStyles();
   const [values, setValues] = React.useState<State>({
-    amount: "",
     password: "",
-    weight: "",
-    weightRange: "",
     showPassword: false,
   });
+
+  const [fetchLogin] = loginApi.endpoints.login.useLazyQuery();
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,15 +51,30 @@ const LoginModule = () => {
     event.preventDefault();
   };
 
+  const handleLogin = async () => {
+    const loginResponse = await fetchLogin({ email: "", password: "" });
+    localStorage.setItem("token", loginResponse.status);
+    // TODO: UID should be get from login API
+    const uid = "21344j23hjl";
+    // TODO: Save UID in account slice
+  };
+
   return (
     <>
       <ProfileLayout page="login-page">
         <div className={classes.root}>
-          <Card sx={{ minWidth: "450px" }}>
+          <Card
+            sx={{
+              minWidth: "450px",
+            }}
+          >
             <CardHeader
               title="CARPETA CIUDADANA"
-              subheader="Iniciar Sesión"
-              sx={{ mt: 5 }}
+              sx={{
+                mt: 6,
+                display: "flex",
+                flexDirection: "column",
+              }}
             />
             <CardContent sx={{ display: "flex", flexDirection: "column" }}>
               <Box
@@ -108,7 +120,11 @@ const LoginModule = () => {
                   />
                 </FormControl>
               </Box>
-              <Button variant="contained" sx={{ m: 3, mb: 8 }}>
+              <Button
+                variant="contained"
+                sx={{ m: 3, mb: 8 }}
+                onClick={handleLogin}
+              >
                 Iniciar Sesión
               </Button>
             </CardContent>
