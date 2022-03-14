@@ -23,18 +23,17 @@ const axiosBaseQuery =
     unknown,
     unknown
   > =>
-  async (requestOpts, { getState }) => {
+  async (requestOpts) => {
     const axiosInstance = createClient(baseURL);
-    const token: string | undefined | null = localStorage.getItem("token");
-    let config;
+    const token: string | null = localStorage.getItem("token");
+    const config = {
+      ...requestOpts,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...requestOpts.headers,
+      },
+    };
     try {
-      config = {
-        ...requestOpts,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          ...requestOpts.headers,
-        },
-      };
       const result = await axiosInstance(config);
       return { data: result.data };
     } catch (axiosError) {
