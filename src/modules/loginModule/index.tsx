@@ -1,5 +1,6 @@
+import React from "react";
+
 import {
-  Avatar,
   Button,
   Card,
   CardContent,
@@ -15,7 +16,6 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
-import React from "react";
 import useStyles from "./styles";
 
 interface State {

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import { Link } from "react-router-dom";
 import TopicRoundedIcon from "@mui/icons-material/TopicRounded";
 import { useTheme } from "@mui/material/styles";
 
@@ -28,18 +29,22 @@ const Sidebar = () => {
       />
       <Divider />
       <List>
-        <ListItem button key={"Inicio"}>
-          <ListItemIcon>
-            <HomeRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary={"Inicio"} />
-        </ListItem>
-        <ListItem button key={"Documentos"}>
-          <ListItemIcon>
-            <TopicRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary={"Documentos"} />
-        </ListItem>
+        <Link to="/dashboard">
+          <ListItem button key={"Inicio"}>
+            <ListItemIcon>
+              <HomeRoundedIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Inicio"} />
+          </ListItem>
+        </Link>
+        <Link to="/dashboard/documents">
+          <ListItem button key={"Documentos"}>
+            <ListItemIcon>
+              <TopicRoundedIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Documentos"} />
+          </ListItem>
+        </Link>
       </List>
     </div>
   );
