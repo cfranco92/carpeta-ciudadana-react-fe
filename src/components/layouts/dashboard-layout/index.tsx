@@ -8,9 +8,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "./sidebar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 interface DashboardLayoutProps {
   page: string;
@@ -47,9 +46,6 @@ export default function DashboardLayout({
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            CARPETA CIUDADANA
-          </Typography>
         </Toolbar>
       </AppBar>
       <Box
