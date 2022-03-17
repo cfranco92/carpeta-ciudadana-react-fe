@@ -5,7 +5,6 @@ import "./App.css";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import DashboardContainer from "./containers/dashboardContainer";
-import HomeContainer from "./containers/homeContainer";
 import LoginContainer from "./containers/loginContainer";
 import { useAppSelector } from "./store";
 import { userLoggedIn } from "./store/account";
@@ -13,7 +12,7 @@ import { userLoggedIn } from "./store/account";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomeContainer />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route
         path="dashboard/*"
         element={

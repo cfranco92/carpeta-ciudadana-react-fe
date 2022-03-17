@@ -10,7 +10,7 @@ export interface InitialAccountStateProps {
 
 const initialState: InitialAccountStateProps = {
   user: undefined,
-  loggedIn: true,
+  loggedIn: false,
 };
 
 const accountSlice = createSlice({
