@@ -23,10 +23,16 @@ const accountSlice = createSlice({
         loggedIn: action.payload,
       };
     },
+    setUser: (state, action: PayloadAction<User>) => {
+      return {
+        ...state,
+        user: action.payload,
+      };
+    },
   },
 });
 
-export const { setLoggedIn } = accountSlice.actions;
+export const { setLoggedIn, setUser } = accountSlice.actions;
 export const userAccount = (state: RootState) => state.account.user;
 export const userLoggedIn = (state: RootState) => state.account.loggedIn;
 

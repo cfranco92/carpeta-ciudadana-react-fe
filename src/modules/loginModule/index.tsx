@@ -13,11 +13,15 @@ import {
   TextField,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { setLoggedIn, setUser } from "../../store/account";
 
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
 import { loginApi } from "./../../services/login";
+import { useAppDispatch } from "../../store";
+import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
+import { usersApi } from "../../services/users";
 
 interface State {
   password: string;
@@ -32,6 +36,11 @@ const LoginModule = () => {
   });
 
   const [fetchLogin] = loginApi.endpoints.login.useLazyQuery();
+  const [fetchUser] = usersApi.endpoints.fetchUser.useLazyQuery();
+
+  let navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +66,18 @@ const LoginModule = () => {
     // TODO: UID should be get from login API
     const uid = "21344j23hjl";
     // TODO: Save UID in account slice
+    dispatch(setLoggedIn(true));
+
+    const user = {
+      uid: uid,
+      name: "Cristian",
+      lastName: "Franco",
+      email: "cfrancobedoya@gmail.com",
+      address: "Carrera 45",
+    };
+    dispatch(setUser(user));
+
+    navigate("/");
   };
 
   return (
