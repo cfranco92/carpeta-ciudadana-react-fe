@@ -1,8 +1,6 @@
 import React from "react";
 
 import {
-  Avatar,
-  Box,
   Divider,
   List,
   ListItem,
@@ -25,20 +23,24 @@ const Sidebar = () => {
         sx={{ backgroundColor: theme.palette.primary.main }}
         children={
           <>
-            <Avatar sx={{ width: "35px", height: "35px" }}>C</Avatar>
-            <Typography variant="inherit" color="GrayText" sx={{ ml: 2 }}>
-              Cristian Franco
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                color: "GrayText",
+              }}
+            >
+              CARPETA CIUDADANA
             </Typography>
           </>
         }
       />
-      <Box sx={{ m: 5 }}>
-        <Typography variant="inherit">Carpeta Ciudadana</Typography>
-      </Box>
-      <List sx={{ backgroundColor: "" }}>
-        <Divider />
+      <List>
         <Link to="/dashboard">
-          <ListItem button key={"Inicio"} sx={{ ml: 2 }}>
+          <ListItem button key={"Inicio"}>
             <ListItemIcon>
               <HomeRoundedIcon />
             </ListItemIcon>
@@ -47,7 +49,7 @@ const Sidebar = () => {
         </Link>
         <Divider />
         <Link to="/dashboard/documents">
-          <ListItem button key={"Documentos"} sx={{ ml: 2 }}>
+          <ListItem button key={"Documentos"}>
             <ListItemIcon>
               <TopicRoundedIcon />
             </ListItemIcon>

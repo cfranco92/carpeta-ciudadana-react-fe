@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { Avatar, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -8,6 +9,9 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "./sidebar";
 import Toolbar from "@mui/material/Toolbar";
+import { setLoggedIn } from "../../../store/account";
+import { useAppDispatch } from "../../../store";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 300;
 
@@ -22,8 +26,34 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    handleCloseUserMenu();
+    dispatch(setLoggedIn(false));
+    navigate("/login");
+  };
+
+  const handleRoute = () => {
+    navigate("/dashboard/profile");
+    handleCloseUserMenu();
   };
 
   return (
@@ -36,7 +66,12 @@ export default function DashboardLayout({
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "space-between", sm: "end" },
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -46,6 +81,47 @@ export default function DashboardLayout({
           >
             <MenuIcon />
           </IconButton>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="inherit" color="GrayText" sx={{ mr: 2 }}>
+              Cristian Franco
+            </Typography>
+            <Tooltip title="Ajustes">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  alt="Cristian Franco"
+                  src="/static/images/avatar/2.jpg"
+                />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={handleRoute}>
+                <Typography textAlign="center">Mi cuenta</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <Typography textAlign="center">Cerrar sesión</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
       <Box

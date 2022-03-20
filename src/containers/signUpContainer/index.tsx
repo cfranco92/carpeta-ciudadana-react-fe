@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  CircularProgress,
   FormControl,
   IconButton,
   Input,
@@ -24,7 +25,6 @@ import { useAppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { usePostUserMutation } from "../../services/users";
 import useStyles from "./styles";
-import { usersApi } from "../../services/users";
 
 interface State {
   email: string;
@@ -47,10 +47,10 @@ const SignUpContainer = () => {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [fetchLogin] = loginApi.endpoints.login.useLazyQuery();
-  const [fetchUser] = usersApi.endpoints.fetchUser.useLazyQuery();
+  const [fetchLogin, { isLoading: isFetchLoginLoading }] =
+    loginApi.endpoints.login.useLazyQuery();
 
-  const [postUser, result] = usePostUserMutation();
+  const [postUser] = usePostUserMutation();
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,123 +94,135 @@ const SignUpContainer = () => {
     <>
       <ProfileLayout page="login-page">
         <div className={classes.root}>
-          <Card
-            sx={{
-              minWidth: "450px",
-            }}
-          >
-            <CardHeader
-              avatar={
-                <>
-                  <IconButton
-                    aria-label="Example"
-                    onClick={() => navigate("/")}
-                  >
-                    <ArrowBackRoundedIcon />
-                  </IconButton>
-                </>
-              }
-              title={
-                <>
-                  <Typography variant="h5" component="div">
-                    CARPETA CIUDADANA
-                  </Typography>
-                </>
-              }
+          {isFetchLoginLoading ? (
+            <>
+              <CircularProgress color="inherit" />
+            </>
+          ) : (
+            <Card
               sx={{
-                ml: 2,
-                mt: 6,
-                display: "flex",
-                flexDirection: "row",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
+                minWidth: "450px",
               }}
-            />
-            <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-              <Box
-                component="form"
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  m: 3,
-                  "& > :not(style)": { mb: 3 },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <FormControl sx={{}} variant="standard">
-                  <InputLabel htmlFor="standard-email">Email</InputLabel>
-                  <Input
-                    id="standard-email"
-                    type="text"
-                    value={values.email}
-                    onChange={handleChange("email")}
-                  />
-                </FormControl>
-                <FormControl sx={{}} variant="standard">
-                  <InputLabel htmlFor="standard-adornment-password">
-                    Password
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-password"
-                    type={values.showPassword ? "text" : "password"}
-                    value={values.password}
-                    onChange={handleChange("password")}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {values.showPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-                <FormControl sx={{}} variant="standard">
-                  <InputLabel htmlFor="standard-name">Nombre</InputLabel>
-                  <Input
-                    id="standard-name"
-                    type="text"
-                    value={values.name}
-                    onChange={handleChange("name")}
-                  />
-                </FormControl>
-                <FormControl sx={{}} variant="standard">
-                  <InputLabel htmlFor="standard-lastName">Apellido</InputLabel>
-                  <Input
-                    id="standard-lastName"
-                    type="text"
-                    value={values.lastName}
-                    onChange={handleChange("lastName")}
-                  />
-                </FormControl>
-                <FormControl sx={{}} variant="standard">
-                  <InputLabel htmlFor="standard-address">Dirección</InputLabel>
-                  <Input
-                    id="standard-address"
-                    type="text"
-                    value={values.address}
-                    onChange={handleChange("address")}
-                  />
-                </FormControl>
-              </Box>
-              <Button
-                variant="contained"
-                sx={{ m: 3, mb: 8 }}
-                onClick={handleSignUp}
-              >
-                Registrar
-              </Button>
-            </CardContent>
-          </Card>
+            >
+              <>
+                <CardHeader
+                  avatar={
+                    <>
+                      <IconButton
+                        aria-label="Example"
+                        onClick={() => navigate("/")}
+                      >
+                        <ArrowBackRoundedIcon />
+                      </IconButton>
+                    </>
+                  }
+                  title={
+                    <>
+                      <Typography variant="h5" component="div">
+                        CARPETA CIUDADANA
+                      </Typography>
+                    </>
+                  }
+                  sx={{
+                    ml: 2,
+                    mt: 6,
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                />
+                <CardContent sx={{ display: "flex", flexDirection: "column" }}>
+                  <Box
+                    component="form"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      m: 3,
+                      "& > :not(style)": { mb: 3 },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                  >
+                    <FormControl sx={{}} variant="standard">
+                      <InputLabel htmlFor="standard-email">Email</InputLabel>
+                      <Input
+                        id="standard-email"
+                        type="text"
+                        value={values.email}
+                        onChange={handleChange("email")}
+                      />
+                    </FormControl>
+                    <FormControl sx={{}} variant="standard">
+                      <InputLabel htmlFor="standard-adornment-password">
+                        Password
+                      </InputLabel>
+                      <Input
+                        id="standard-adornment-password"
+                        type={values.showPassword ? "text" : "password"}
+                        value={values.password}
+                        onChange={handleChange("password")}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                            >
+                              {values.showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                    <FormControl sx={{}} variant="standard">
+                      <InputLabel htmlFor="standard-name">Nombre</InputLabel>
+                      <Input
+                        id="standard-name"
+                        type="text"
+                        value={values.name}
+                        onChange={handleChange("name")}
+                      />
+                    </FormControl>
+                    <FormControl sx={{}} variant="standard">
+                      <InputLabel htmlFor="standard-lastName">
+                        Apellido
+                      </InputLabel>
+                      <Input
+                        id="standard-lastName"
+                        type="text"
+                        value={values.lastName}
+                        onChange={handleChange("lastName")}
+                      />
+                    </FormControl>
+                    <FormControl sx={{}} variant="standard">
+                      <InputLabel htmlFor="standard-address">
+                        Dirección
+                      </InputLabel>
+                      <Input
+                        id="standard-address"
+                        type="text"
+                        value={values.address}
+                        onChange={handleChange("address")}
+                      />
+                    </FormControl>
+                  </Box>
+                  <Button
+                    variant="contained"
+                    sx={{ m: 3, mb: 8 }}
+                    onClick={handleSignUp}
+                  >
+                    Registrar
+                  </Button>
+                </CardContent>
+              </>
+            </Card>
+          )}
         </div>
       </ProfileLayout>
     </>
