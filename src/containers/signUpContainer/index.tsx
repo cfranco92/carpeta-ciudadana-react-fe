@@ -10,37 +10,47 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  TextField,
+  Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { setLoggedIn, setUser } from "../../store/account";
 
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
-import { loginApi } from "./../../services/login";
+import { User } from "../../models/user";
+import { loginApi } from "../../services/login";
 import { useAppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
+import { usePostUserMutation } from "../../services/users";
 import useStyles from "./styles";
 import { usersApi } from "../../services/users";
 
 interface State {
+  email: string;
   password: string;
   showPassword: boolean;
+  name: string;
+  lastName: string;
+  address: string;
 }
 
-const LoginModule = () => {
+const SignUpContainer = () => {
   const classes = useStyles();
   const [values, setValues] = React.useState<State>({
+    email: "",
     password: "",
+    name: "",
+    lastName: "",
+    address: "",
     showPassword: false,
   });
-
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [fetchLogin] = loginApi.endpoints.login.useLazyQuery();
   const [fetchUser] = usersApi.endpoints.fetchUser.useLazyQuery();
 
-  let navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
+  const [postUser, result] = usePostUserMutation();
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,22 +70,22 @@ const LoginModule = () => {
     event.preventDefault();
   };
 
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
     const loginResponse = await fetchLogin({ email: "", password: "" });
     localStorage.setItem("token", loginResponse.status);
     // TODO: UID should be get from login API
     const uid = "21344j23hjl";
-    // TODO: Save UID in account slice
     dispatch(setLoggedIn(true));
 
-    const user = {
+    const user: User = {
       uid: uid,
-      name: "Cristian",
-      lastName: "Franco",
-      email: "cfrancobedoya@gmail.com",
-      address: "Carrera 45",
+      name: values.name,
+      lastName: values.lastName,
+      email: values.email,
+      address: values.address,
     };
     dispatch(setUser(user));
+    postUser({ user });
 
     navigate("/");
   };
@@ -90,11 +100,31 @@ const LoginModule = () => {
             }}
           >
             <CardHeader
-              title="CARPETA CIUDADANA"
+              avatar={
+                <>
+                  <IconButton
+                    aria-label="Example"
+                    onClick={() => navigate("/")}
+                  >
+                    <ArrowBackRoundedIcon />
+                  </IconButton>
+                </>
+              }
+              title={
+                <>
+                  <Typography variant="h5" component="div">
+                    CARPETA CIUDADANA
+                  </Typography>
+                </>
+              }
               sx={{
+                ml: 2,
                 mt: 6,
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             />
             <CardContent sx={{ display: "flex", flexDirection: "column" }}>
@@ -109,11 +139,15 @@ const LoginModule = () => {
                 noValidate
                 autoComplete="off"
               >
-                <TextField
-                  id="standard-basic"
-                  label="Email"
-                  variant="standard"
-                />
+                <FormControl sx={{}} variant="standard">
+                  <InputLabel htmlFor="standard-email">Email</InputLabel>
+                  <Input
+                    id="standard-email"
+                    type="text"
+                    value={values.email}
+                    onChange={handleChange("email")}
+                  />
+                </FormControl>
                 <FormControl sx={{}} variant="standard">
                   <InputLabel htmlFor="standard-adornment-password">
                     Password
@@ -140,13 +174,40 @@ const LoginModule = () => {
                     }
                   />
                 </FormControl>
+                <FormControl sx={{}} variant="standard">
+                  <InputLabel htmlFor="standard-name">Nombre</InputLabel>
+                  <Input
+                    id="standard-name"
+                    type="text"
+                    value={values.name}
+                    onChange={handleChange("name")}
+                  />
+                </FormControl>
+                <FormControl sx={{}} variant="standard">
+                  <InputLabel htmlFor="standard-lastName">Apellido</InputLabel>
+                  <Input
+                    id="standard-lastName"
+                    type="text"
+                    value={values.lastName}
+                    onChange={handleChange("lastName")}
+                  />
+                </FormControl>
+                <FormControl sx={{}} variant="standard">
+                  <InputLabel htmlFor="standard-address">Dirección</InputLabel>
+                  <Input
+                    id="standard-address"
+                    type="text"
+                    value={values.address}
+                    onChange={handleChange("address")}
+                  />
+                </FormControl>
               </Box>
               <Button
                 variant="contained"
                 sx={{ m: 3, mb: 8 }}
-                onClick={handleLogin}
+                onClick={handleSignUp}
               >
-                Iniciar Sesión
+                Registrar
               </Button>
             </CardContent>
           </Card>
@@ -156,4 +217,4 @@ const LoginModule = () => {
   );
 };
 
-export default LoginModule;
+export default SignUpContainer;

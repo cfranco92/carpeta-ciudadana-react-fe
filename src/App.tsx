@@ -8,6 +8,7 @@ import DashboardContainer from "./containers/dashboardContainer";
 import LoginContainer from "./containers/loginContainer";
 import { useAppSelector } from "./store";
 import { userLoggedIn } from "./store/account";
+import SignUpContainer from "./containers/signUpContainer";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         }
       />
       <Route path="/login" element={<LoginContainer />} />
+      <Route path="/signup" element={<SignUpContainer />} />
     </Routes>
   );
 }
