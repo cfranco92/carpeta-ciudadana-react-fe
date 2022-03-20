@@ -1,3 +1,5 @@
+import React, { useCallback, useEffect } from "react";
+
 import {
   Box,
   Card,
@@ -7,9 +9,10 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
 
 import { DashboardLayout } from "../../../components/layouts";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import { usersApi } from "../../../services/users";
 
 function DashboardHome() {
@@ -26,11 +29,25 @@ function DashboardHome() {
     handleGetUser();
   }, [handleGetUser]);
 
+  const theme = useTheme();
+  const matchesScreenSize = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <DashboardLayout page="dashboard-page">
-      <Box sx={{ p: 8, display: "flex", flexDirection: "row" }}>
-        <Grid container spacing={8}>
-          <Grid item xs={6} md={6}>
+      <Box
+        sx={{
+          p: 8,
+        }}
+      >
+        <Grid
+          container
+          spacing={8}
+          sx={{
+            display: "flex",
+            flexDirection: matchesScreenSize ? "column" : "row",
+          }}
+        >
+          <Grid item xs={12} md={12} lg={6} xl={6}>
             <Card>
               <CardActionArea sx={{ display: "flex" }}>
                 <CardMedia
@@ -50,7 +67,7 @@ function DashboardHome() {
               </CardActionArea>
             </Card>
           </Grid>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={12} md={12} lg={6} xl={6}>
             <Card>
               <CardActionArea sx={{ display: "flex" }}>
                 <CardMedia

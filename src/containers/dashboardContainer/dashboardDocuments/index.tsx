@@ -1,8 +1,9 @@
+import React from "react";
+
 import { Box, Paper } from "@mui/material";
 
 import { DashboardLayout } from "../../../components/layouts";
-import React from "react";
-import StickyHeadTable from "../../../components/tables/StickyHeadTable";
+import EnhancedTable from "../../../components/tables/EnhancedTable";
 import UploadDocuments from "./uploadDocuments";
 
 function DashboardDocuments() {
@@ -12,7 +13,7 @@ function DashboardDocuments() {
         <Paper variant="outlined" sx={{ mb: 4, p: 4 }} elevation={3}>
           <UploadDocuments />
         </Paper>
-        <StickyHeadTable />
+        <EnhancedTable />
       </Box>
     </DashboardLayout>
   );
