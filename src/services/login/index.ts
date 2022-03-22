@@ -1,6 +1,7 @@
 import { User } from "../../models/user";
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { gatewayPort } from "../../constants";
 
 interface QueryParams {
   email: string;
@@ -9,7 +10,9 @@ interface QueryParams {
 
 export const loginApi = createApi({
   reducerPath: "loginApi",
-  baseQuery: apiBaseQuery("https://carpetaciudadana.com/login/api/v1"),
+  baseQuery: apiBaseQuery(
+    `http://localhost:${gatewayPort}/authentication/api/v1/user`
+  ),
   tagTypes: ["Login"],
   endpoints(builder) {
     return {

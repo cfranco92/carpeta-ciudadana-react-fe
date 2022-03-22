@@ -1,5 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
+import { authenticationApi } from "../services/authentication";
 import { configureStore } from "@reduxjs/toolkit";
 import { filesApi } from "../services/files";
 import { loginApi } from "../services/login";
@@ -12,6 +13,7 @@ export const store = configureStore({
     getDefaultMiddleware({ serializableCheck: false })
       .concat(filesApi.middleware)
       .concat(loginApi.middleware)
+      .concat(authenticationApi.middleware)
       .concat(usersApi.middleware),
 });
 

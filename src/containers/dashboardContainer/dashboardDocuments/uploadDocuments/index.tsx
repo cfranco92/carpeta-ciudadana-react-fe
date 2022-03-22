@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { Button, CircularProgress, Stack } from "@mui/material";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { Box } from "@mui/system";
 import CheckIcon from "@mui/icons-material/Check";
 import Fab from "@mui/material/Fab";
 import SaveIcon from "@mui/icons-material/Save";
 import { green } from "@mui/material/colors";
+import storage from "../../../../firebase";
 import { styled } from "@mui/material/styles";
 import { usePostFileMutation } from "../../../../services/files";
 
@@ -17,7 +19,7 @@ const Input = styled("input")({
 function UploadDocuments() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const timer = useRef<number>();
 
   const [postFile] = usePostFileMutation();
@@ -38,25 +40,27 @@ function UploadDocuments() {
   }, []);
 
   const handleSelectFile = ({ target }: any) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(target.files[0]);
-    fileReader.onload = (e: any) => {
-      const file = e.target.result;
-      setFile(file);
-    };
+    setFile(target.files[0]);
   };
 
   const handleUploadFile = async () => {
     if (!loading) {
       setSuccess(false);
       setLoading(true);
-      timer.current = window.setTimeout(() => {
-        setSuccess(true);
-        setLoading(false);
-      }, 2000);
-    }
-    if (file) {
-      await postFile(file);
+      if (!file) {
+        return;
+      }
+      // TODO: Get UID from user slice - Mongo ID
+      const uid = "1125084168";
+      const storageRef = ref(storage, `${uid}/${file.name}`);
+      uploadBytes(storageRef, file).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((downloadURL) => {
+          console.log(downloadURL);
+          setSuccess(true);
+          setLoading(false);
+          setFile(null);
+        });
+      });
     }
   };
 

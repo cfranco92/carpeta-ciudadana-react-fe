@@ -1,16 +1,28 @@
-import React from "react";
-
 import "./App.css";
 
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  authenticationApi,
+  useGetTokenMutation,
+} from "./services/authentication";
 
 import DashboardContainer from "./containers/dashboardContainer";
 import LoginContainer from "./containers/loginContainer";
+import SignUpContainer from "./containers/signUpContainer";
 import { useAppSelector } from "./store";
 import { userLoggedIn } from "./store/account";
-import SignUpContainer from "./containers/signUpContainer";
 
 function App() {
+  const [fetchToken] = useGetTokenMutation();
+
+  useEffect(() => {
+    (async () => {
+      const response: any = await fetchToken({ uid: "" });
+      localStorage.setItem("token", response.data.access_token);
+    })();
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" replace />} />

@@ -1,4 +1,5 @@
 import accountReducer from "./account";
+import { authenticationApi } from "../services/authentication";
 import { combineReducers } from "@reduxjs/toolkit";
 import { filesApi } from "../services/files";
 import { loginApi } from "../services/login";
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
   [loginApi.reducerPath]: loginApi.reducer,
   [filesApi.reducerPath]: filesApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
+  [authenticationApi.reducerPath]: authenticationApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
