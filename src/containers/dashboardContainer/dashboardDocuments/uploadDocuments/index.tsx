@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
@@ -9,6 +10,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import { green } from "@mui/material/colors";
 import storage from "../../../../firebase";
 import { styled } from "@mui/material/styles";
+import { useAppSelector } from "../../../../store";
+import { usePostDocumentsMutation } from "../../../../services/documents";
+import { userAccount } from "../../../../store/account";
 
 const Input = styled("input")({
   display: "none",
@@ -19,6 +23,9 @@ function UploadDocuments() {
   const [success, setSuccess] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const timer = useRef<number>();
+  const userSelector = useAppSelector(userAccount);
+
+  const [postDocument] = usePostDocumentsMutation();
 
   const buttonSx = {
     ...(success && {
@@ -46,12 +53,19 @@ function UploadDocuments() {
       if (!file) {
         return;
       }
-      // TODO: Get UID from user slice - Mongo ID
-      const uid = "1125084168";
+      const uid = userSelector?.uid;
       const storageRef = ref(storage, `${uid}/${file.name}`);
       uploadBytes(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((downloadURL) => {
           console.log(downloadURL);
+          postDocument({
+            idUser: uid || "",
+            url: downloadURL,
+            fileName: file.name,
+            fileSize: String(file.size),
+            fileType: file.type,
+            date: String(file.lastModified),
+          });
           setSuccess(true);
           setLoading(false);
           setFile(null);

@@ -1,16 +1,14 @@
+import React, { useEffect } from "react";
+
 import "./App.css";
 
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import React, { useEffect } from "react";
-import {
-  authenticationApi,
-  useGetTokenMutation,
-} from "./services/authentication";
 
 import DashboardContainer from "./containers/dashboardContainer";
 import LoginContainer from "./containers/loginContainer";
 import SignUpContainer from "./containers/signUpContainer";
 import { useAppSelector } from "./store";
+import { useGetTokenMutation } from "./services/authentication";
 import { userLoggedIn } from "./store/account";
 
 function App() {

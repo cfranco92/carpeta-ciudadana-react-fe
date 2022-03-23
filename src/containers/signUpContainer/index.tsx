@@ -69,7 +69,7 @@ const SignUpContainer = () => {
 
   const handleSignUp = async () => {
     const loginResponse = await fetchLogin({ email: "", password: "" });
-    localStorage.setItem("token", String(loginResponse));
+    // localStorage.setItem("token", String(loginResponse));
     // TODO: UID should be get from login API
     const uid = "21344j23hjl";
     dispatch(setLoggedIn(true));
