@@ -1,6 +1,7 @@
 import { User } from "../../models/user";
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { gatewayPort } from "../../constants";
 
 interface FetchUserQueryParams {
   uid: string;
@@ -11,7 +12,7 @@ interface PostUserQueryParams {
 
 export const usersApi = createApi({
   reducerPath: "usersApi",
-  baseQuery: apiBaseQuery("https://carpetaciudadana.com/users/api/v1"),
+  baseQuery: apiBaseQuery(`http://localhost:${gatewayPort}/users/api/v1/users`),
   tagTypes: ["Users"],
   endpoints(builder) {
     return {

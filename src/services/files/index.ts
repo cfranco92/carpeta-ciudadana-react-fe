@@ -1,5 +1,6 @@
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { gatewayPort } from "../../constants";
 
 interface QueryParams {
   uid: string;
@@ -8,7 +9,9 @@ interface QueryParams {
 
 export const filesApi = createApi({
   reducerPath: "filesApi",
-  baseQuery: apiBaseQuery("/documents/api/v1"),
+  baseQuery: apiBaseQuery(
+    `http://localhost:${gatewayPort}/documents/api/v1/documents`
+  ),
   tagTypes: ["Files"],
   endpoints(builder) {
     return {
