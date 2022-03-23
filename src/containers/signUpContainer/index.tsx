@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   Button,
   Card,
@@ -19,9 +17,9 @@ import { setLoggedIn, setUser } from "../../store/account";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
-import { User } from "../../models/user";
-import { loginApi } from "../../services/login";
+import React from "react";
 import { useAppDispatch } from "../../store";
+import { useLoginMutation } from "../../services/login";
 import { useNavigate } from "react-router-dom";
 import { usePostUserMutation } from "../../services/users";
 import useStyles from "./styles";
@@ -47,8 +45,7 @@ const SignUpContainer = () => {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [fetchLogin, { isLoading: isFetchLoginLoading }] =
-    loginApi.endpoints.login.useLazyQuery();
+  const [fetchLogin, { isLoading: isFetchLoginLoading }] = useLoginMutation();
 
   const [postUser] = usePostUserMutation();
 
@@ -72,20 +69,21 @@ const SignUpContainer = () => {
 
   const handleSignUp = async () => {
     const loginResponse = await fetchLogin({ email: "", password: "" });
-    localStorage.setItem("token", loginResponse.status);
+    localStorage.setItem("token", String(loginResponse));
     // TODO: UID should be get from login API
     const uid = "21344j23hjl";
     dispatch(setLoggedIn(true));
 
-    const user: User = {
-      uid: uid,
+    const user = {
+      // uid: uid,
       name: values.name,
       lastName: values.lastName,
       email: values.email,
       address: values.address,
     };
     dispatch(setUser(user));
-    postUser({ user });
+
+    postUser(user);
 
     navigate("/");
   };

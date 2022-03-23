@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   Button,
   Card,
@@ -13,11 +11,12 @@ import {
   InputLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { loginApi, useLoginMutation } from "./../../services/login";
 import { setLoggedIn, setUser } from "../../store/account";
 
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
-import { loginApi } from "./../../services/login";
+import React from "react";
 import { useAppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -38,8 +37,7 @@ const LoginContainer = () => {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [fetchLogin, { isLoading: isFetchLoginLoading }] =
-    loginApi.endpoints.login.useLazyQuery();
+  const [fetchLogin, { isLoading: isFetchLoginLoading }] = useLoginMutation();
   const [fetchUser, { isLoading: isFetchUserLoading }] =
     usersApi.endpoints.fetchUser.useLazyQuery();
 
@@ -63,7 +61,7 @@ const LoginContainer = () => {
 
   const handleLogin = async () => {
     const loginResponse = await fetchLogin({ email: "", password: "" });
-    localStorage.setItem("token", loginResponse.status);
+    localStorage.setItem("token", String(loginResponse));
     // TODO: UID should be get from login API
     const uid = "21344j23hjl";
     dispatch(setLoggedIn(true));

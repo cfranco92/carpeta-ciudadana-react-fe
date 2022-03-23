@@ -4,7 +4,7 @@ import { RootState } from "..";
 import { User } from "../../models/user";
 
 export interface InitialAccountStateProps {
-  user: User | undefined;
+  user: Partial<User> | undefined;
   loggedIn: boolean;
 }
 
@@ -23,7 +23,7 @@ const accountSlice = createSlice({
         loggedIn: action.payload,
       };
     },
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser: (state, action: PayloadAction<Partial<User>>) => {
       return {
         ...state,
         user: action.payload,

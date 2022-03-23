@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
@@ -10,7 +9,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import { green } from "@mui/material/colors";
 import storage from "../../../../firebase";
 import { styled } from "@mui/material/styles";
-import { usePostFileMutation } from "../../../../services/files";
 
 const Input = styled("input")({
   display: "none",
@@ -21,8 +19,6 @@ function UploadDocuments() {
   const [success, setSuccess] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const timer = useRef<number>();
-
-  const [postFile] = usePostFileMutation();
 
   const buttonSx = {
     ...(success && {

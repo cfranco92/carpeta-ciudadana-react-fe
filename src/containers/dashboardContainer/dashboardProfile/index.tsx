@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   Box,
   Button,
@@ -15,6 +13,7 @@ import { setUser, userAccount } from "../../../store/account";
 import { useAppDispatch, useAppSelector } from "../../../store";
 
 import { DashboardLayout } from "../../../components/layouts";
+import React from "react";
 import { User } from "../../../models/user";
 import { usePostUserMutation } from "../../../services/users";
 
@@ -26,7 +25,7 @@ interface State {
 }
 
 function DashboardProfile() {
-  const userSelector: User | undefined = useAppSelector(userAccount);
+  const userSelector: Partial<User> | undefined = useAppSelector(userAccount);
   const [values, setValues] = React.useState<State>({
     email: userSelector?.email || "",
     name: userSelector?.name || "",
@@ -46,15 +45,15 @@ function DashboardProfile() {
     if (!userSelector) {
       return;
     }
-    const user: User = {
-      uid: userSelector.uid,
+    const user = {
+      // uid: userSelector.uid,
       name: values.name,
       lastName: values.lastName,
       email: values.email,
       address: values.address,
     };
     dispatch(setUser(user));
-    postUser({ user });
+    postUser(user);
   };
 
   return (
