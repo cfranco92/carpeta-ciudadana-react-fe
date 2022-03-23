@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
-import DeleteIcon from "@mui/icons-material/Delete";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -17,6 +17,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/material/styles";
+import { useValidateDocumentsMutation } from "../../../services/documents";
 import { visuallyHidden } from "@mui/utils";
 
 interface Data {
@@ -194,10 +195,19 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  selected: any;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected } = props;
+  const { numSelected, selected } = props;
+
+  const [validateDocuments] = useValidateDocumentsMutation();
+
+  const handleValidateDocuments = () => {
+    // TODO: UPLOAD THE DOCUMENTS HERE
+    validateDocuments(selected);
+    console.log(selected);
+  };
 
   return (
     <Toolbar
@@ -233,9 +243,9 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
+        <Tooltip title="Validar">
+          <IconButton onClick={handleValidateDocuments}>
+            <FactCheckOutlinedIcon />
           </IconButton>
         </Tooltip>
       ) : (
@@ -314,7 +324,10 @@ export default function EnhancedTable({ documentsList }: any) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          selected={selected}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

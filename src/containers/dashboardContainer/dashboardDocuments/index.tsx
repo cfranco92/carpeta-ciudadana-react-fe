@@ -14,8 +14,10 @@ function DashboardDocuments() {
     documentsApi.endpoints.fetchDocumentsByUserId.useLazyQuery();
 
   useEffect(() => {
-    if (!userSelector?.uid) return;
-    fetchDocumentsByUserId({ uid: userSelector?.uid });
+    (async () => {
+      if (!userSelector?.uid) return;
+      await fetchDocumentsByUserId({ uid: userSelector?.uid });
+    })();
   }, []);
 
   return (
