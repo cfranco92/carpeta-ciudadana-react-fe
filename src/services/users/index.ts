@@ -7,7 +7,10 @@ interface FetchUserQueryParams {
   uid: string;
 }
 interface PostUserQueryParams {
-  user: User;
+  email: string;
+  name: string;
+  lastName: string;
+  address: string;
 }
 
 export const usersApi = createApi({
@@ -28,7 +31,7 @@ export const usersApi = createApi({
         query: (queryParams) => ({
           url: `/`,
           method: "POST",
-          data: queryParams.user,
+          data: queryParams,
         }),
         invalidatesTags: ["Users"],
       }),

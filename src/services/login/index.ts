@@ -8,6 +8,15 @@ interface QueryParams {
   password: string;
 }
 
+interface createNewKeycloakUserParams {
+  firstName: string;
+  lastName: string;
+  password: string;
+  email: string;
+  address: string;
+  numIdentificacion: string;
+}
+
 export const loginApi = createApi({
   reducerPath: "loginApi",
   baseQuery: apiBaseQuery(
@@ -16,16 +25,26 @@ export const loginApi = createApi({
   tagTypes: ["Login"],
   endpoints(builder) {
     return {
-      login: builder.query<User, QueryParams>({
+      login: builder.mutation<any, QueryParams>({
         query: (queryParams) => ({
-          url: `/token`,
-          method: "GET",
-          data: { email: queryParams.email, password: queryParams.password },
+          url: `/login`,
+          method: "POST",
+          data: queryParams,
         }),
-        providesTags: ["Login"],
+        invalidatesTags: ["Login"],
       }),
+      createNewKeycloakUser: builder.mutation<any, createNewKeycloakUserParams>(
+        {
+          query: (queryParams) => ({
+            url: `/`,
+            method: "POST",
+            data: queryParams,
+          }),
+          invalidatesTags: ["Login"],
+        }
+      ),
     };
   },
 });
 
-export const { useLoginQuery } = loginApi;
+export const { useCreateNewKeycloakUserMutation, useLoginMutation } = loginApi;

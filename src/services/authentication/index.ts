@@ -19,7 +19,7 @@ export const authenticationApi = createApi({
     const myData = {
       grant_type: "client_credentials",
       client_id: "carpeta-ciudadana",
-      client_secret: "a2b5144a-a39e-4d8b-af98-7c0caca2e05c",
+      client_secret: "6e3ddd2e-eeb6-4022-b7b1-29b8e645adb5",
     };
     return {
       getToken: builder.mutation<
