@@ -1,4 +1,3 @@
-import { User } from "../../models/user";
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { gatewayPort } from "../../constants";
@@ -29,18 +28,18 @@ export const loginApi = createApi({
         query: (queryParams) => ({
           url: `/login`,
           method: "POST",
-          data: queryParams,
+          data: { queryParams },
         }),
-        invalidatesTags: ["Login"],
+        // invalidatesTags: ["Login"],
       }),
       createNewKeycloakUser: builder.mutation<any, createNewKeycloakUserParams>(
         {
           query: (queryParams) => ({
             url: `/`,
             method: "POST",
-            data: queryParams,
+            data: { queryParams },
           }),
-          invalidatesTags: ["Login"],
+          // invalidatesTags: ["Login"],
         }
       ),
     };

@@ -2,7 +2,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import { authenticationApi } from "../services/authentication";
 import { configureStore } from "@reduxjs/toolkit";
-import { filesApi } from "../services/files";
+import { documentsApi } from "../services/documents";
 import { loginApi } from "../services/login";
 import rootReducer from "./rootReducer";
 import { usersApi } from "../services/users";
@@ -11,9 +11,9 @@ export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false })
-      .concat(filesApi.middleware)
       .concat(loginApi.middleware)
       .concat(authenticationApi.middleware)
+      .concat(documentsApi.middleware)
       .concat(usersApi.middleware),
 });
 

@@ -1,4 +1,3 @@
-import { User } from "../../models/user";
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { gatewayPort } from "../../constants";
@@ -23,7 +22,7 @@ interface PostValidateDocumentsQueryParams {
 }
 
 export const documentsApi = createApi({
-  reducerPath: "usersApi",
+  reducerPath: "documentsApi",
   baseQuery: apiBaseQuery(
     `http://localhost:${gatewayPort}/documents/api/v1/documents`
   ),
@@ -61,5 +60,8 @@ export const documentsApi = createApi({
   },
 });
 
-export const { useFetchDocumentsByUserIdQuery, usePostDocumentsMutation } =
-  documentsApi;
+export const {
+  useFetchDocumentsByUserIdQuery,
+  usePostDocumentsMutation,
+  useValidateDocumentsMutation,
+} = documentsApi;

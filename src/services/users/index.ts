@@ -47,4 +47,5 @@ export const usersApi = createApi({
   },
 });
 
-export const { useFetchUserQuery, usePostUserMutation } = usersApi;
+export const { useFetchUserQuery, usePostUserMutation, usePutUserMutation } =
+  usersApi;
