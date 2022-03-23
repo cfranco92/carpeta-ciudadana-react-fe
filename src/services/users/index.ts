@@ -35,6 +35,14 @@ export const usersApi = createApi({
         }),
         invalidatesTags: ["Users"],
       }),
+      putUser: builder.mutation<User, PostUserQueryParams>({
+        query: (queryParams) => ({
+          url: `/`,
+          method: "PUT",
+          data: queryParams,
+        }),
+        invalidatesTags: ["Users"],
+      }),
     };
   },
 });
