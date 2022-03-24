@@ -10,14 +10,14 @@ import {
   InputAdornment,
   InputLabel,
 } from "@mui/material";
+import React, { useEffect } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { loginApi, useLoginMutation } from "./../../services/login";
 import { setLoggedIn, setUser } from "../../store/account";
 
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
-import React from "react";
 import { useAppDispatch } from "../../store";
+import { useLoginMutation } from "./../../services/login";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import { usersApi } from "../../services/users";
@@ -37,9 +37,16 @@ const LoginContainer = () => {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [fetchLogin, { isLoading: isFetchLoginLoading }] = useLoginMutation();
-  const [fetchUser, { isLoading: isFetchUserLoading }] =
-    usersApi.endpoints.fetchUser.useLazyQuery();
+  const [
+    fetchUser,
+    {
+      data: userData,
+      isLoading: isFetchUserLoading,
+      isSuccess: isFetchUserSucces,
+    },
+  ] = usersApi.endpoints.fetchUser.useLazyQuery();
+
+  const [postLogin, { isLoading: isPostLoginLoading }] = useLoginMutation();
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,31 +67,33 @@ const LoginContainer = () => {
   };
 
   const handleLogin = async () => {
-    const loginResponse = await fetchLogin({ email: "", password: "" });
-    // localStorage.setItem("token", String(loginResponse));
-    // TODO: UID should be get from login API
-    const uid = "21344j23hjl";
-    dispatch(setLoggedIn(true));
+    const userLoginResponse: any = await postLogin({
+      email: values.email,
+      password: values.password,
+    });
+    localStorage.clear();
 
-    const userResponse = await fetchUser({ uid });
-    console.log(userResponse);
-    const user = {
-      uid: uid,
-      name: "Cristian",
-      lastName: "Franco",
-      email: "cfrancobedoya@gmail.com",
-      address: "Carrera 45",
-    };
-    dispatch(setUser(user));
+    if (!userLoginResponse.data.token)
+      return alert("El servicio de login está caido");
 
-    navigate("/");
+    localStorage.setItem("token", userLoginResponse.data.token || "");
+
+    fetchUser({ uid: userLoginResponse.data.uid });
   };
+
+  useEffect(() => {
+    if (isFetchUserSucces && userData) {
+      dispatch(setUser(userData));
+      dispatch(setLoggedIn(true));
+      navigate("/");
+    }
+  }, [dispatch, isFetchUserSucces, navigate, userData]);
 
   return (
     <>
       <ProfileLayout page="login-page">
         <div className={classes.root}>
-          {isFetchUserLoading || isFetchLoginLoading ? (
+          {isFetchUserLoading || isPostLoginLoading ? (
             <CircularProgress color="inherit" />
           ) : (
             <>
