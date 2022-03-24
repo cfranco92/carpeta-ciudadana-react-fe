@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Box,
   Button,
@@ -11,11 +13,12 @@ import {
 } from "@mui/material";
 import { setUser, userAccount } from "../../../store/account";
 import { useAppDispatch, useAppSelector } from "../../../store";
+import {
+  usePutUserMutation,
+} from "../../../services/users";
 
 import { DashboardLayout } from "../../../components/layouts";
-import React from "react";
 import { User } from "../../../models/user";
-import { usePostUserMutation } from "../../../services/users";
 
 interface State {
   email: string;
@@ -35,7 +38,7 @@ function DashboardProfile() {
     numIdentificacion: userSelector?.numIdentificacion || "",
   });
 
-  const [postUser] = usePostUserMutation();
+  const [putUser] = usePutUserMutation();
   const dispatch = useAppDispatch();
 
   const handleChange =
@@ -48,6 +51,7 @@ function DashboardProfile() {
       return;
     }
     const user: User = {
+      ...userSelector,
       // uid: userSelector.uid,
       firstName: values.name,
       lastName: values.lastName,
@@ -56,7 +60,8 @@ function DashboardProfile() {
       numIdentificacion: values.numIdentificacion,
     };
     dispatch(setUser(user));
-    postUser(user);
+    putUser(user);
+    alert("Usuario actualizado");
   };
 
   return (

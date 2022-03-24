@@ -1,5 +1,5 @@
-import { Button, CircularProgress, Stack } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { Button, CircularProgress, Stack } from "@mui/material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { Box } from "@mui/system";
@@ -56,7 +56,6 @@ function UploadDocuments() {
       const storageRef = ref(storage, `${uid}/${file.name}`);
       uploadBytes(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((downloadURL) => {
-          console.log(downloadURL);
           postDocument({
             idUser: uid || "",
             url: downloadURL,
@@ -68,6 +67,7 @@ function UploadDocuments() {
           setSuccess(true);
           setLoading(false);
           setFile(null);
+          alert("Documento guardado");
         });
       });
     }

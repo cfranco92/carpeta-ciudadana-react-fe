@@ -203,9 +203,8 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const [validateDocuments] = useValidateDocumentsMutation();
 
   const handleValidateDocuments = () => {
-    // TODO: UPLOAD THE DOCUMENTS HERE
     validateDocuments(selectedForRequest);
-    console.log(selectedForRequest);
+    alert("Documentos validados correctamente");
   };
 
   return (
@@ -317,7 +316,6 @@ export default function EnhancedTable({ documentsList }: any) {
     fileName: string,
     file: any
   ) => {
-    console.log(file);
     const selectedIndex = selected.indexOf(fileName);
     let newSelected: readonly string[] = [];
 
@@ -346,7 +344,6 @@ export default function EnhancedTable({ documentsList }: any) {
       },
     ];
     setSelectedForRequest(newSelectedForRequest);
-    console.log(newSelectedForRequest);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
