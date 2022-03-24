@@ -1,6 +1,6 @@
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { gatewayPort } from "../../constants";
+import { clientSecret, gatewayPort } from "../../constants";
 import qs from "qs";
 
 //
@@ -19,7 +19,7 @@ export const authenticationApi = createApi({
     const myData = {
       grant_type: "client_credentials",
       client_id: "carpeta-ciudadana",
-      client_secret: "6e3ddd2e-eeb6-4022-b7b1-29b8e645adb5",
+      client_secret: clientSecret,
     };
     return {
       getToken: builder.mutation<
