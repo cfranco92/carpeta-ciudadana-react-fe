@@ -25,7 +25,6 @@ import React from "react";
 import { User } from "../../models/user";
 import { useAppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
-import { usePostUserMutation } from "../../services/users";
 import useStyles from "./styles";
 
 interface State {

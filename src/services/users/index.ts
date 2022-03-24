@@ -6,12 +6,6 @@ import { gatewayPort } from "../../constants";
 interface FetchUserQueryParams {
   uid: string;
 }
-// interface PostUserQueryParams {
-//   email: string;
-//   name: string;
-//   lastName: string;
-//   address: string;
-// }
 
 export const usersApi = createApi({
   reducerPath: "usersApi",

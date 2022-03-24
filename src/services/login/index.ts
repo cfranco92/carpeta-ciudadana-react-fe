@@ -1,7 +1,6 @@
 import { User } from "../../models/user";
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { gatewayPort } from "../../constants";
 
 interface QueryParams {
   email: string;
