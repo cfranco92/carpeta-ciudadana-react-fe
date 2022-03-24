@@ -66,9 +66,6 @@ function DashboardHome() {
                   <Typography gutterBottom variant="h5" component="div">
                     Firma
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    En este recuadro tenemos la firma del usuario.
-                  </Typography>
                 </CardContent>
               </CardActionArea>
             </Card>
