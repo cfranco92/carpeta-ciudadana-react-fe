@@ -202,8 +202,9 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
   const [validateDocuments] = useValidateDocumentsMutation();
 
-  const handleValidateDocuments = () => {
-    validateDocuments(selectedForRequest);
+  const handleValidateDocuments = async () => {
+    console.log(selectedForRequest)
+    await validateDocuments(selectedForRequest);
     alert("Documentos validados correctamente");
   };
 
@@ -343,6 +344,7 @@ export default function EnhancedTable({ documentsList }: any) {
         fileName: file.fileName,
       },
     ];
+    console.log(newSelectedForRequest)
     setSelectedForRequest(newSelectedForRequest);
   };
 

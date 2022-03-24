@@ -81,7 +81,12 @@ const SignUpContainer = () => {
       numIdentificacion: values.numIdentificacion,
     };
 
-    await postNewKeycloakUser(user);
+    const postNewKeycloakUserResponse:any = await postNewKeycloakUser(user);
+
+    if (postNewKeycloakUserResponse.data.includes('se encuentra registrado en el operador')) {
+      alert(postNewKeycloakUserResponse.data)
+      return
+    }
 
     const userLoginResponse: any = await postLogin({
       email: values.email,
