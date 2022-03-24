@@ -6,12 +6,12 @@ import { gatewayPort } from "../../constants";
 interface FetchUserQueryParams {
   uid: string;
 }
-interface PostUserQueryParams {
-  email: string;
-  name: string;
-  lastName: string;
-  address: string;
-}
+// interface PostUserQueryParams {
+//   email: string;
+//   name: string;
+//   lastName: string;
+//   address: string;
+// }
 
 export const usersApi = createApi({
   reducerPath: "usersApi",
@@ -27,7 +27,7 @@ export const usersApi = createApi({
         }),
         providesTags: ["Users"],
       }),
-      postUser: builder.mutation<User, PostUserQueryParams>({
+      postUser: builder.mutation<User, User>({
         query: (queryParams) => ({
           url: `/`,
           method: "POST",
@@ -35,7 +35,7 @@ export const usersApi = createApi({
         }),
         invalidatesTags: ["Users"],
       }),
-      putUser: builder.mutation<User, PostUserQueryParams>({
+      putUser: builder.mutation<User, User>({
         query: (queryParams) => ({
           url: `/`,
           method: "PUT",

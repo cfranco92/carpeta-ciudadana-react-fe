@@ -13,13 +13,17 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { setLoggedIn, setUser } from "../../store/account";
+import {
+  useCreateNewKeycloakUserMutation,
+  useLoginMutation,
+} from "../../services/login";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { Box } from "@mui/system";
 import { ProfileLayout } from "../../components/layouts";
 import React from "react";
+import { User } from "../../models/user";
 import { useAppDispatch } from "../../store";
-import { useLoginMutation } from "../../services/login";
 import { useNavigate } from "react-router-dom";
 import { usePostUserMutation } from "../../services/users";
 import useStyles from "./styles";
@@ -31,6 +35,7 @@ interface State {
   name: string;
   lastName: string;
   address: string;
+  numIdentificacion: string;
 }
 
 const SignUpContainer = () => {
@@ -41,13 +46,14 @@ const SignUpContainer = () => {
     name: "",
     lastName: "",
     address: "",
+    numIdentificacion: "",
     showPassword: false,
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [fetchLogin, { isLoading: isFetchLoginLoading }] = useLoginMutation();
 
-  const [postUser] = usePostUserMutation();
+  const [postNewKeycloakUser] = useCreateNewKeycloakUserMutation();
+  const [postLogin, { isLoading: isPostingLogin }] = useLoginMutation();
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,22 +74,38 @@ const SignUpContainer = () => {
   };
 
   const handleSignUp = async () => {
-    const loginResponse = await fetchLogin({ email: "", password: "" });
-    // localStorage.setItem("token", String(loginResponse));
-    // TODO: UID should be get from login API
-    const uid = "21344j23hjl";
-    dispatch(setLoggedIn(true));
-
-    const user = {
-      // uid: uid,
-      name: values.name,
+    let user: User = {
+      firstName: values.name,
       lastName: values.lastName,
       email: values.email,
       address: values.address,
+      numIdentificacion: values.numIdentificacion,
     };
-    dispatch(setUser(user));
 
-    postUser(user);
+    await postNewKeycloakUser(user);
+
+    const userLoginResponse: any = await postLogin({
+      email: values.email,
+      password: "1234567",
+    });
+    localStorage.clear();
+
+    if (!userLoginResponse.data.token)
+      return alert("El servicio de login está caido");
+
+    localStorage.setItem("token", userLoginResponse.data.token || "");
+
+    const userLoged: User = {
+      uid: userLoginResponse.uid,
+      firstName: values.name,
+      lastName: values.lastName,
+      email: values.email,
+      address: values.address,
+      numIdentificacion: values.numIdentificacion,
+    };
+
+    dispatch(setUser(userLoged));
+    dispatch(setLoggedIn(true));
 
     navigate("/");
   };
@@ -92,7 +114,7 @@ const SignUpContainer = () => {
     <>
       <ProfileLayout page="login-page">
         <div className={classes.root}>
-          {isFetchLoginLoading ? (
+          {isPostingLogin ? (
             <>
               <CircularProgress color="inherit" />
             </>
@@ -207,6 +229,17 @@ const SignUpContainer = () => {
                         type="text"
                         value={values.address}
                         onChange={handleChange("address")}
+                      />
+                    </FormControl>
+                    <FormControl sx={{}} variant="standard">
+                      <InputLabel htmlFor="standard-numIdentificacion">
+                        Cédula
+                      </InputLabel>
+                      <Input
+                        id="standard-numIdentificacion"
+                        type="text"
+                        value={values.numIdentificacion}
+                        onChange={handleChange("numIdentificacion")}
                       />
                     </FormControl>
                   </Box>

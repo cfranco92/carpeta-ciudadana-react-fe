@@ -1,3 +1,4 @@
+import { User } from "../../models/user";
 import { apiBaseQuery } from "../base";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { gatewayPort } from "../../constants";
@@ -7,20 +8,9 @@ interface QueryParams {
   password: string;
 }
 
-interface createNewKeycloakUserParams {
-  firstName: string;
-  lastName: string;
-  password: string;
-  email: string;
-  address: string;
-  numIdentificacion: string;
-}
-
 export const loginApi = createApi({
   reducerPath: "loginApi",
-  baseQuery: apiBaseQuery(
-    `http://localhost:${gatewayPort}/authentication/api/v1/user`
-  ),
+  baseQuery: apiBaseQuery(`http://localhost/authentication/api/v1/user`),
   tagTypes: ["Login"],
   endpoints(builder) {
     return {
@@ -28,20 +18,18 @@ export const loginApi = createApi({
         query: (queryParams) => ({
           url: `/login`,
           method: "POST",
-          data: { queryParams },
+          data: queryParams,
         }),
         // invalidatesTags: ["Login"],
       }),
-      createNewKeycloakUser: builder.mutation<any, createNewKeycloakUserParams>(
-        {
-          query: (queryParams) => ({
-            url: `/`,
-            method: "POST",
-            data: { queryParams },
-          }),
-          // invalidatesTags: ["Login"],
-        }
-      ),
+      createNewKeycloakUser: builder.mutation<any, User>({
+        query: (queryParams) => ({
+          url: ``,
+          method: "POST",
+          data: queryParams,
+        }),
+        // invalidatesTags: ["Login"],
+      }),
     };
   },
 });

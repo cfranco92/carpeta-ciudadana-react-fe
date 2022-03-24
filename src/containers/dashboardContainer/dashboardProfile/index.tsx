@@ -22,15 +22,17 @@ interface State {
   name: string;
   lastName: string;
   address: string;
+  numIdentificacion: string;
 }
 
 function DashboardProfile() {
   const userSelector: Partial<User> | undefined = useAppSelector(userAccount);
   const [values, setValues] = React.useState<State>({
     email: userSelector?.email || "",
-    name: userSelector?.name || "",
+    name: userSelector?.firstName || "",
     lastName: userSelector?.lastName || "",
     address: userSelector?.address || "",
+    numIdentificacion: userSelector?.numIdentificacion || "",
   });
 
   const [postUser] = usePostUserMutation();
@@ -45,12 +47,13 @@ function DashboardProfile() {
     if (!userSelector) {
       return;
     }
-    const user = {
+    const user: User = {
       // uid: userSelector.uid,
-      name: values.name,
+      firstName: values.name,
       lastName: values.lastName,
       email: values.email,
       address: values.address,
+      numIdentificacion: values.numIdentificacion,
     };
     dispatch(setUser(user));
     postUser(user);
