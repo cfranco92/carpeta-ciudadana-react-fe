@@ -18,7 +18,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/material/styles";
+import { useAppSelector } from "../../../store";
 import { useValidateDocumentsMutation } from "../../../services/documents";
+import { userAccount } from "../../../store/account";
 import { visuallyHidden } from "@mui/utils";
 
 interface Data {
@@ -26,32 +28,27 @@ interface Data {
   size: number;
   type: string;
   date: string;
+  documentId: string;
+  fileUrl: string;
 }
 
 function createData(
   fileName: string,
   size: number,
   type: string,
-  date: string
+  date: string,
+  documentId: string,
+  fileUrl: string
 ): Data {
   return {
     fileName,
     size,
     type,
     date,
+    documentId,
+    fileUrl,
   };
 }
-
-// const rows = [
-//   createData("Cupcake", 30.71, "Image", "16 feb 2022"),
-//   createData("Donut", 237.6, "Video", "16 feb 2022"),
-//   createData("Eclair", 30.71, "Audio", "16 feb 2022"),
-//   createData("Cupcake2", 237.6, "Image", "16 feb 2022"),
-//   createData("Cupcake3", 30.71, "Image", "16 feb 2022"),
-//   createData("Donut2", 237.6, "Video", "16 feb 2022"),
-//   createData("Eclair2", 30.71, "Audio", "16 feb 2022"),
-//   createData("Cupcake4", 237.6, "Image", "16 feb 2022"),
-// ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -197,17 +194,18 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
   numSelected: number;
   selected: any;
+  selectedForRequest: any;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, selected } = props;
+  const { numSelected, selected, selectedForRequest } = props;
 
   const [validateDocuments] = useValidateDocumentsMutation();
 
   const handleValidateDocuments = () => {
     // TODO: UPLOAD THE DOCUMENTS HERE
-    validateDocuments(selected);
-    console.log(selected);
+    validateDocuments(selectedForRequest);
+    console.log(selectedForRequest);
   };
 
   return (
@@ -264,11 +262,14 @@ export default function EnhancedTable({ documentsList }: any) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("size");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [selectedForRequest, setSelectedForRequest] = React.useState<any[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const userSelector = useAppSelector(userAccount);
+
   const [rows, setRows] = useState([
-    createData("Cupcake", 30.71, "Image", "16 feb 2022"),
+    createData("Libro 1", 30.71, "Image", "16 feb 2022", "345678", "rtyuio"),
   ]);
 
   useEffect(() => {
@@ -279,7 +280,11 @@ export default function EnhancedTable({ documentsList }: any) {
           item.fileName,
           Number(item.fileSize),
           item.fileType,
-          item.date
+          item.date,
+          item.id,
+          // item.url
+          // TODO: The BE is not ready to get long url
+          "www.pruebalibro1231231.com"
         );
         newRows.push(newRow);
       }
@@ -307,7 +312,12 @@ export default function EnhancedTable({ documentsList }: any) {
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, fileName: string) => {
+  const handleClick = (
+    event: React.MouseEvent<unknown>,
+    fileName: string,
+    file: any
+  ) => {
+    console.log(file);
     const selectedIndex = selected.indexOf(fileName);
     let newSelected: readonly string[] = [];
 
@@ -325,6 +335,18 @@ export default function EnhancedTable({ documentsList }: any) {
     }
 
     setSelected(newSelected);
+
+    const newSelectedForRequest = [
+      ...selectedForRequest,
+      {
+        uId: userSelector?.uid,
+        documentId: userSelector?.numIdentificacion,
+        fileUrl: file.fileUrl,
+        fileName: file.fileName,
+      },
+    ];
+    setSelectedForRequest(newSelectedForRequest);
+    console.log(newSelectedForRequest);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -350,6 +372,7 @@ export default function EnhancedTable({ documentsList }: any) {
         <EnhancedTableToolbar
           numSelected={selected.length}
           selected={selected}
+          selectedForRequest={selectedForRequest}
         />
         <TableContainer>
           <Table
@@ -377,7 +400,8 @@ export default function EnhancedTable({ documentsList }: any) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.fileName)}
+                      // onClick={(event) => handleClick(event, row.fileName)}
+                      onClick={(event) => handleClick(event, row.fileName, row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

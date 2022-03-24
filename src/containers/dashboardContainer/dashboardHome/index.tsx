@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 
 import {
   Box,
@@ -11,25 +11,14 @@ import {
 } from "@mui/material";
 
 import { DashboardLayout } from "../../../components/layouts";
+import { useAppSelector } from "../../../store";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { usersApi } from "../../../services/users";
+import { userAccount } from "../../../store/account";
 
 function DashboardHome() {
-  const [fetchUser] = usersApi.endpoints.fetchUser.useLazyQuery();
-
-  // const handleGetUser = useCallback(async () => {
-  //   // TODO: Get UID from account slice
-  //   const uid = "1412342423";
-  //   const userResponse = await fetchUser({ uid: uid });
-  //   // TODO: Save user in account slice
-  // }, [fetchUser]);
-
-  // useEffect(() => {
-  //   handleGetUser();
-  // }, [handleGetUser]);
-
   const theme = useTheme();
+  const userSelector = useAppSelector(userAccount);
   const matchesScreenSize = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
@@ -58,10 +47,7 @@ function DashboardHome() {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Cristian Franco
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    En este recuadro tenemos información del usuario.
+                    {userSelector?.firstName} {userSelector?.lastName}
                   </Typography>
                 </CardContent>
               </CardActionArea>

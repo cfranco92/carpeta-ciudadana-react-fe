@@ -1,5 +1,7 @@
 import React, { ReactNode } from "react";
 import { Avatar, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
+import { setLoggedIn, userAccount } from "../../../store/account";
+import { useAppDispatch, useAppSelector } from "../../../store";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -9,8 +11,6 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "./sidebar";
 import Toolbar from "@mui/material/Toolbar";
-import { setLoggedIn } from "../../../store/account";
-import { useAppDispatch } from "../../../store";
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 300;
@@ -28,6 +28,7 @@ export default function DashboardLayout({
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const userSelector = useAppSelector(userAccount);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -88,13 +89,13 @@ export default function DashboardLayout({
             }}
           >
             <Typography variant="inherit" color="GrayText" sx={{ mr: 2 }}>
-              Cristian Franco
+              {userSelector?.firstName} {userSelector?.lastName}
             </Typography>
             <Tooltip title="Ajustes">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  alt="Cristian Franco"
-                  src="/static/images/avatar/2.jpg"
+                  alt={userSelector?.firstName}
+                  // src="/static/images/avatar/2.jpg"
                 />
               </IconButton>
             </Tooltip>
