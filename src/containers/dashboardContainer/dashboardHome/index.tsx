@@ -18,16 +18,16 @@ import { usersApi } from "../../../services/users";
 function DashboardHome() {
   const [fetchUser] = usersApi.endpoints.fetchUser.useLazyQuery();
 
-  const handleGetUser = useCallback(async () => {
-    // TODO: Get UID from account slice
-    const uid = "1412342423";
-    const userResponse = await fetchUser({ uid: uid });
-    // TODO: Save user in account slice
-  }, [fetchUser]);
+  // const handleGetUser = useCallback(async () => {
+  //   // TODO: Get UID from account slice
+  //   const uid = "1412342423";
+  //   const userResponse = await fetchUser({ uid: uid });
+  //   // TODO: Save user in account slice
+  // }, [fetchUser]);
 
-  useEffect(() => {
-    handleGetUser();
-  }, [handleGetUser]);
+  // useEffect(() => {
+  //   handleGetUser();
+  // }, [handleGetUser]);
 
   const theme = useTheme();
   const matchesScreenSize = useMediaQuery(theme.breakpoints.down("md"));

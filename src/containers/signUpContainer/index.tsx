@@ -95,7 +95,7 @@ const SignUpContainer = () => {
     localStorage.setItem("token", userLoginResponse.data.token || "");
 
     const userLoged: User = {
-      uid: userLoginResponse.uid,
+      uid: userLoginResponse.data.uid,
       firstName: values.name,
       lastName: values.lastName,
       email: values.email,
