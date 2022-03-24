@@ -18,7 +18,7 @@ function DashboardDocuments() {
       if (!userSelector?.uid) return;
       await fetchDocumentsByUserId({ uid: userSelector?.uid });
     })();
-  }, []);
+  }, [fetchDocumentsByUserId, userSelector?.uid]);
 
   return (
     <DashboardLayout page="dashboard-documents-page">

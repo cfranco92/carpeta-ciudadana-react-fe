@@ -1,10 +1,11 @@
+import React, { useEffect, useState } from "react";
+
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
-import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -21,36 +22,36 @@ import { useValidateDocumentsMutation } from "../../../services/documents";
 import { visuallyHidden } from "@mui/utils";
 
 interface Data {
-  name: string;
+  fileName: string;
   size: number;
   type: string;
   date: string;
 }
 
 function createData(
-  name: string,
+  fileName: string,
   size: number,
   type: string,
   date: string
 ): Data {
   return {
-    name,
+    fileName,
     size,
     type,
     date,
   };
 }
 
-const rows = [
-  createData("Cupcake", 30.71, "Image", "16 feb 2022"),
-  createData("Donut", 237.6, "Video", "16 feb 2022"),
-  createData("Eclair", 30.71, "Audio", "16 feb 2022"),
-  createData("Cupcake2", 237.6, "Image", "16 feb 2022"),
-  createData("Cupcake3", 30.71, "Image", "16 feb 2022"),
-  createData("Donut2", 237.6, "Video", "16 feb 2022"),
-  createData("Eclair2", 30.71, "Audio", "16 feb 2022"),
-  createData("Cupcake4", 237.6, "Image", "16 feb 2022"),
-];
+// const rows = [
+//   createData("Cupcake", 30.71, "Image", "16 feb 2022"),
+//   createData("Donut", 237.6, "Video", "16 feb 2022"),
+//   createData("Eclair", 30.71, "Audio", "16 feb 2022"),
+//   createData("Cupcake2", 237.6, "Image", "16 feb 2022"),
+//   createData("Cupcake3", 30.71, "Image", "16 feb 2022"),
+//   createData("Donut2", 237.6, "Video", "16 feb 2022"),
+//   createData("Eclair2", 30.71, "Audio", "16 feb 2022"),
+//   createData("Cupcake4", 237.6, "Image", "16 feb 2022"),
+// ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -102,7 +103,7 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "name",
+    id: "fileName",
     numeric: false,
     disablePadding: true,
     label: "Nombre",
@@ -170,7 +171,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.id === "name" ? "left" : "center"}
+            align={headCell.id === "fileName" ? "left" : "center"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -266,6 +267,28 @@ export default function EnhancedTable({ documentsList }: any) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [rows, setRows] = useState([
+    createData("Cupcake", 30.71, "Image", "16 feb 2022"),
+  ]);
+
+  useEffect(() => {
+    if (documentsList) {
+      let newRows: any[] = [];
+      for (let item of documentsList) {
+        const newRow = createData(
+          item.fileName,
+          Number(item.fileSize),
+          item.fileType,
+          item.date
+        );
+        newRows.push(newRow);
+      }
+      if (newRows) {
+        setRows(newRows);
+      }
+    }
+  }, [documentsList]);
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -277,19 +300,19 @@ export default function EnhancedTable({ documentsList }: any) {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.fileName);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event: React.MouseEvent<unknown>, fileName: string) => {
+    const selectedIndex = selected.indexOf(fileName);
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, fileName);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -315,7 +338,7 @@ export default function EnhancedTable({ documentsList }: any) {
     setPage(0);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (fileName: string) => selected.indexOf(fileName) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -348,17 +371,17 @@ export default function EnhancedTable({ documentsList }: any) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.fileName);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.fileName)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.fileName}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -376,7 +399,7 @@ export default function EnhancedTable({ documentsList }: any) {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.fileName}
                       </TableCell>
                       <TableCell align="center">{row.size} KB</TableCell>
                       <TableCell align="center">{row.type}</TableCell>
